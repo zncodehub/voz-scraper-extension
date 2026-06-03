@@ -50,9 +50,19 @@ copy install.py         F:\Projects\Antigravity\Scrape-Voz\
 4. Copy lại **Extension ID** vừa được tạo (chuỗi 32 ký tự ngẫu nhiên, ví dụ: `feijklcbaiaobmgbcihhkgijmmejeefp`).
 
 ### Bước 3: Đăng ký Native Messaging Host
-Chạy script cài đặt để đăng ký extension ID của bạn với hệ điều hành:
+Chạy script cài đặt để đăng ký extension ID của bạn với hệ điều hành. **Lưu ý: Nếu sử dụng môi trường ảo (virtualenv), bạn cần kích hoạt môi trường ảo trước khi chạy lệnh này để extension nhận diện đúng các thư viện đã cài đặt:**
+
+*Trên Windows (PowerShell):*
+```powershell
+cd C:\Projects\Scrape-Voz
+.\.venv\Scripts\Activate.ps1
+python install.py --extension-id <EXTENSION_ID_CUA_BAN>
+```
+
+*Trên macOS / Linux:*
 ```bash
-cd F:\Projects\Antigravity\Scrape-Voz
+cd /path/to/Scrape-Voz
+source .venv/bin/activate
 python install.py --extension-id <EXTENSION_ID_CUA_BAN>
 ```
 
@@ -141,9 +151,19 @@ copy install.py         F:\Projects\Antigravity\Scrape-Voz\
 4. Copy the newly generated **Extension ID** (e.g., `feijklcbaiaobmgbcihhkgijmmejeefp`).
 
 ### Step 3: Register Native Messaging Host
-Run the installation script to register your extension with the operating system:
+Run the installation script to register your extension with the operating system. **Note: If using a virtual environment (virtualenv), ensure you activate it first so the extension resolves packages correctly:**
+
+*On Windows (PowerShell):*
+```powershell
+cd C:\Projects\Scrape-Voz
+.\.venv\Scripts\Activate.ps1
+python install.py --extension-id <YOUR_EXTENSION_ID>
+```
+
+*On macOS / Linux:*
 ```bash
-cd F:\Projects\Antigravity\Scrape-Voz
+cd /path/to/Scrape-Voz
+source .venv/bin/activate
 python install.py --extension-id <YOUR_EXTENSION_ID>
 ```
 
