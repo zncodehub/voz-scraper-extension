@@ -16,7 +16,8 @@ import tempfile
 import platform
 
 # ===================== CẤU HÌNH =====================
-SCRAPER_DIR  = r"F:\Projects\Antigravity\Scrape-Voz"
+# Tự động lấy thư mục chứa file script hiện tại làm SCRAPER_DIR
+SCRAPER_DIR  = os.path.dirname(os.path.abspath(__file__))
 SCRAPER_FILE = "scrape_voz.py"
 PYTHON_EXE   = "python"   # Hoặc đường dẫn đầy đủ: r"C:\Python311\python.exe"
 # ====================================================
