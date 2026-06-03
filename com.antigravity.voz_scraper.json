@@ -1,0 +1,9 @@
+{
+  "name": "com.antigravity.voz_scraper",
+  "description": "Native host for VOZ Scraper Chrome Extension",
+  "path": "F:\\Projects\\Antigravity\\Scrape-Voz\\voz_native_host.py",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://EXTENSION_ID_PLACEHOLDER/"
+  ]
+}

@@ -1,0 +1,18 @@
+# OS and System Files
+Thumbs.db
+.DS_Store
+
+# Python Cache & Environment
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Generated Extension / Native Messaging Files
+voz_native_host.bat
+id.txt
+icon16.png
+icon48.png
+icon128.png

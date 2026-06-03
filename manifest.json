@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "VOZ Scraper",
+  "version": "1.0",
+  "description": "Scrape VOZ thread bằng 1 click từ trang voz.vn",
+  "permissions": [
+    "activeTab",
+    "nativeMessaging",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://voz.vn/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://voz.vn/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
