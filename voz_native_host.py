@@ -98,9 +98,11 @@ def main():
             pass
 
     # Thiết lập lệnh chạy và khởi chạy tiến trình
-    run_cmd = f'"{PYTHON_EXE}" "{SCRAPER_FILE}" --url "{url}"'
+    # Dùng list2cmdline để tự xử lý quote đúng: không thêm ngoặc nếu không cần thiết
+    parts = [PYTHON_EXE, SCRAPER_FILE, '--url', url]
     if download_imgs:
-        run_cmd += ' --download-images'
+        parts.append('--download-images')
+    run_cmd = subprocess.list2cmdline(parts)
 
     if platform.system() == 'Windows':
         # Luôn mở cửa sổ CMD mới và giữ lại (/k) khi chạy xong
