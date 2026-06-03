@@ -47,7 +47,7 @@ copy install.py         F:\Projects\Antigravity\Scrape-Voz\
    - Edge: `edge://extensions/`
 2. Kích hoạt **Developer mode** (Chế độ nhà phát triển) ở góc trên bên phải.
 3. Click **Load unpacked** (Tải tiện ích đã giải nén) và chọn thư mục `voz-scraper-extension` này.
-4. Copy lại **Extension ID** vừa được tạo (chuỗi 32 ký tự ngẫu nhiên, ví dụ: `feijklcbaiaobmgbcihhkgijmmejeefp`).
+4. Copy lại **Extension ID** vừa được tạo (chuỗi 32 ký tự ngẫu nhiên, ví dụ: `feijklcbaiaobmgbcihhkgijmmejeefp`). *Lưu ý: trên trình duyệt Opera, bạn cần nhấn vào nút **Details** (Chi tiết) của extension mới xem được ID.*
 
 ### Bước 3: Đăng ký Native Messaging Host
 Chạy script cài đặt để đăng ký extension ID của bạn với hệ điều hành. **Lưu ý: Nếu sử dụng môi trường ảo (virtualenv), bạn cần kích hoạt môi trường ảo trước khi chạy lệnh này để extension nhận diện đúng các thư viện đã cài đặt:**
@@ -148,7 +148,7 @@ copy install.py         F:\Projects\Antigravity\Scrape-Voz\
    - Edge: `edge://extensions/`
 2. Enable **Developer mode** in the top-right corner.
 3. Click **Load unpacked** and select this `voz-scraper-extension` folder.
-4. Copy the newly generated **Extension ID** (e.g., `feijklcbaiaobmgbcihhkgijmmejeefp`).
+4. Copy the newly generated **Extension ID** (e.g., `feijklcbaiaobmgbcihhkgijmmejeefp`). *Note: On Opera, you need to click the **Details** button on the extension card to find this ID.*
 
 ### Step 3: Register Native Messaging Host
 Run the installation script to register your extension with the operating system. **Note: If using a virtual environment (virtualenv), ensure you activate it first so the extension resolves packages correctly:**

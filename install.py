@@ -125,7 +125,7 @@ def main():
     ext_id = args.extension_id.strip()
     if len(ext_id) != 32 or not ext_id.isalpha():
         print(f"[!] Extension ID không hợp lệ: '{ext_id}'")
-        print("    Lấy từ chrome://extensions → bật Developer Mode → copy ID (32 chữ cái)")
+        print("    Lấy từ chrome://extensions hoặc opera://extensions → bật Developer Mode → copy ID (trên Opera nhấn vào 'Details' / 'Chi tiết' để xem ID)")
         sys.exit(1)
 
     python_exe = get_python_exe()
