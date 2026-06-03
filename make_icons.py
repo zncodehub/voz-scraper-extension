@@ -8,7 +8,7 @@ try:
     from PIL import Image, ImageDraw, ImageFont
     import os
 
-    for size in [16, 48, 128]:
+    for size in [16, 24, 32, 48, 128]:
         img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
         draw = ImageDraw.Draw(img)
         
@@ -36,7 +36,7 @@ try:
         img.save(fname)
         print(f"[+] {fname} created")
 
-    print("✅ Icons created!")
+    print("Icons created successfully!")
 
 except ImportError:
     print("Pillow không được cài. Chạy: pip install Pillow")
