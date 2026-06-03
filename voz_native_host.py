@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 voz_native_host.py — Native Messaging Host Bridge
 Nhận JSON từ Chrome extension qua stdin, chạy scrape_voz.py, trả kết quả qua stdout.
 
@@ -11,12 +11,44 @@ import json
 import struct
 import subprocess
 import os
+import hashlib
+import tempfile
+import platform
 
 # ===================== CẤU HÌNH =====================
 SCRAPER_DIR  = r"F:\Projects\Antigravity\Scrape-Voz"
 SCRAPER_FILE = "scrape_voz.py"
 PYTHON_EXE   = "python"   # Hoặc đường dẫn đầy đủ: r"C:\Python311\python.exe"
 # ====================================================
+
+
+def is_pid_running(pid: int) -> bool:
+    """Kiểm tra PID có đang hoạt động trên hệ thống hay không."""
+    if pid <= 0:
+        return False
+    if platform.system() == 'Windows':
+        # Dùng Windows API OpenProcess để kiểm tra — không bị treo như os.kill()
+        import ctypes
+        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+        handle = ctypes.windll.kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+        if not handle:
+            return False
+        # Kiểm tra xem process có còn alive hay đã exit
+        exit_code = ctypes.c_ulong()
+        ctypes.windll.kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code))
+        ctypes.windll.kernel32.CloseHandle(handle)
+        STILL_ACTIVE = 259
+        return exit_code.value == STILL_ACTIVE
+    else:
+        # Unix: dùng os.kill signal 0
+        import errno
+        try:
+            os.kill(pid, 0)
+            return True
+        except OSError as err:
+            if err.errno == errno.ESRCH:
+                return False
+            return True
 
 
 def read_message() -> dict:
@@ -42,37 +74,61 @@ def main():
 
     url            = msg.get('url', '')
     download_imgs  = msg.get('downloadImages', False)
-    show_window    = msg.get('showWindow', False)
 
     if not url:
         send_message({'success': False, 'error': 'URL rỗng'})
         return
 
-    # Dựng lệnh
-    cmd = [PYTHON_EXE, SCRAPER_FILE, '--url', url]
-    if download_imgs:
-        cmd.append('--download-images')
+    # Kiểm tra File Lock (Option B) để ngăn chặn chạy trùng URL
+    url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()
+    lock_file = os.path.join(tempfile.gettempdir(), f"com.antigravity.voz_scraper_{url_hash}.lock")
 
-    # Cờ creationflags để hiện/ẩn cửa sổ CMD trên Windows
-    import platform
+    if os.path.exists(lock_file):
+        try:
+            with open(lock_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                old_pid = data.get('pid')
+                if old_pid and is_pid_running(old_pid):
+                    send_message({
+                        'success': False,
+                        'error': f'URL này đang được scrape ở một tiến trình khác (PID: {old_pid}). Vui lòng chờ hoàn thành!'
+                    })
+                    return
+        except Exception:
+            pass
+
+    # Thiết lập lệnh chạy và khởi chạy tiến trình
+    run_cmd = f'"{PYTHON_EXE}" "{SCRAPER_FILE}" --url "{url}"'
+    if download_imgs:
+        run_cmd += ' --download-images'
+
     if platform.system() == 'Windows':
-        import ctypes
+        # Luôn mở cửa sổ CMD mới và giữ lại (/k) khi chạy xong
+        cmd = ['cmd.exe', '/k', run_cmd]
         CREATE_NEW_CONSOLE = 0x00000010
-        CREATE_NO_WINDOW   = 0x08000000
-        flags = CREATE_NEW_CONSOLE if show_window else CREATE_NO_WINDOW
         proc = subprocess.Popen(
             cmd,
             cwd=SCRAPER_DIR,
-            creationflags=flags
+            creationflags=CREATE_NEW_CONSOLE
         )
     else:
-        # macOS / Linux fallback
+        # macOS / Linux fallback (không giữ CMD mở do sự khác biệt môi trường)
+        cmd = [PYTHON_EXE, SCRAPER_FILE, '--url', url]
+        if download_imgs:
+            cmd.append('--download-images')
         proc = subprocess.Popen(cmd, cwd=SCRAPER_DIR)
+
+    # Ghi PID vào file lock
+    try:
+        with open(lock_file, 'w', encoding='utf-8') as f:
+            json.dump({'pid': proc.pid, 'url': url}, f)
+    except Exception:
+        pass
 
     send_message({
         'success': True,
         'pid': proc.pid,
-        'cmd': ' '.join(cmd)
+        'cmd': ' '.join(cmd) if isinstance(cmd, list) else cmd
     })
 
 

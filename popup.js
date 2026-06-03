@@ -4,7 +4,6 @@ const urlDisplay = document.getElementById('url-display');
 const scrapeBtn  = document.getElementById('scrape-btn');
 const statusEl   = document.getElementById('status');
 const optImages  = document.getElementById('opt-images');
-const optWindow  = document.getElementById('opt-window');
 
 let currentUrl = '';
 
@@ -36,8 +35,7 @@ scrapeBtn.addEventListener('click', () => {
 
   const payload = {
     url: currentUrl,
-    downloadImages: optImages.checked,
-    showWindow: optWindow.checked
+    downloadImages: optImages.checked
   };
 
   chrome.runtime.sendMessage({ action: 'scrape', payload }, (response) => {
